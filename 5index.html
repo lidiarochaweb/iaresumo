@@ -1,0 +1,125 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { Upload, Brain, BookOpen, ClipboardList, Sparkles } from "lucide-react";
+
+export default function StudyAI() {
+  const [fileName, setFileName] = useState("");
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    if (file) setFileName(file.name);
+  };
+
+  const generateAI = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setResult({
+        resumo: "Resumo estruturado com conceitos-chave e organização lógica do conteúdo.",
+        questoes: "1. Pergunta estratégica?\nA) Alternativa A\nB) Alternativa B\nC) Alternativa C",
+        fichamento: "Fichamento acadêmico completo com citações e análise crítica.",
+        artigo: "Artigo acadêmico estruturado com introdução, desenvolvimento e conclusão.",
+      });
+      setLoading(false);
+    }, 1500);
+  };
+
+  return (
+    <div className="min-h-screen text-white bg-gradient-to-br from-[#0b001a] via-[#12002b] to-[#1a003d]">
+
+      {/* NAVBAR */}
+      <div className="flex justify-between items-center px-10 py-5 border-b border-white/10 backdrop-blur-xl">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          StudyAI
+        </h1>
+        <Button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl shadow-lg">
+          Dashboard
+        </Button>
+      </div>
+
+      {/* HERO */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mt-20 px-6"
+      >
+        <h2 className="text-6xl font-bold leading-tight">
+          Transforme PDFs em
+          <span className="block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            Inteligência Acadêmica
+          </span>
+        </h2>
+        <p className="text-gray-400 mt-6 max-w-2xl mx-auto">
+          Gere resumos, provas, fichamentos e artigos automaticamente com IA avançada.
+        </p>
+
+        <Button className="mt-8 px-10 py-4 text-lg bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl shadow-2xl hover:scale-105 transition">
+          Começar Agora
+        </Button>
+      </motion.div>
+
+      {/* FEATURES */}
+      <div className="grid md:grid-cols-4 gap-6 px-10 mt-20">
+        {[Upload, Brain, ClipboardList, BookOpen].map((Icon, i) => (
+          <Card key={i} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:scale-105 transition">
+            <CardContent className="p-6 text-center">
+              <Icon className="mx-auto mb-3 text-purple-400" size={32} />
+              <p className="text-sm text-gray-300">Recurso avançado {i + 1}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* UPLOAD */}
+      <div className="mt-24 px-6">
+        <Card className="max-w-3xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
+          <CardContent className="p-8 text-center">
+            <div className="border-2 border-dashed border-purple-500 rounded-xl p-8 mb-4">
+              <Upload className="mx-auto mb-3 text-purple-400" size={40} />
+              <p className="text-gray-400">Arraste ou envie seu PDF</p>
+              <input type="file" accept="application/pdf" onChange={handleFile} className="mt-4" />
+            </div>
+
+            {fileName && <p className="text-purple-300">Arquivo: {fileName}</p>}
+
+            <Button onClick={generateAI} className="mt-6 w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-lg rounded-xl shadow-xl">
+              {loading ? "Processando IA..." : "✨ Gerar Inteligência"}
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* RESULTADOS */}
+      {result && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid md:grid-cols-2 gap-6 px-10 mt-20">
+
+          {[{ title: "Resumo", content: result.resumo },
+            { title: "Questões", content: result.questoes },
+            { title: "Fichamento", content: result.fichamento },
+            { title: "Artigo", content: result.artigo }].map((item, i) => (
+
+            <Card key={i} className="bg-white/5 backdrop-blur-xl border border-purple-700 rounded-2xl">
+              <CardContent className="p-6">
+                <h3 className="text-purple-400 mb-3 flex items-center gap-2">
+                  <Sparkles size={16} /> {item.title}
+                </h3>
+                <pre className="text-sm text-gray-300 whitespace-pre-wrap">{item.content}</pre>
+              </CardContent>
+            </Card>
+
+          ))}
+
+        </motion.div>
+      )}
+
+      {/* FOOTER */}
+      <div className="text-center text-gray-500 mt-24 pb-6">
+        © 2026 StudyAI — AI Academic Platform
+      </div>
+
+    </div>
+  );
+}
